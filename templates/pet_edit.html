@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{pet.name}} the {{pet.species}} | Details{% endblock %}
+{% block content %}
+{% if pet.photo_url %}
+<img src="{{pet.photo_url}}">
+{% endif %}
+<div>
+    <h3>Pet Details:</h3>
+    <ul>
+        <li><strong>Name:</strong> {{pet.name}}</li>
+        <li><strong>Species:</strong> {{pet.species}}</li>
+        {% if pet.age %}
+        <li><strong>Age:</strong> {{pet.age}} years</li>
+        {% endif %}
+        <li>
+            <strong>Availability:</strong>
+            {% if pet.available%}
+            Available
+            {% else %}
+            Not available
+            {% endif %}
+        </li>
+        {% if pet.notes %}
+        <li><strong>Comments:</strong> {{pet.notes}}</li>
+        {% endif %}
+    </ul>
+
+</div>
+
+<h2>Update the Pet:</h2>
+<form action="/{{pet.id}}" method="POST">
+    {{ form.hidden_tag() }}
+
+    {% for field in form
+           if field.widget.input_type != 'hidden' %}
+    <div>
+        <p>
+            {{ field.label }}
+            {{ field(class_="form-control", placeholder=field.description) }}
+
+            {% for error in field.errors %}
+            <small>{{ error }}</small>
+            {% endfor %}
+        </p>
+    </div>
+
+    {% endfor %}
+
+    <button>Submit Changes</button>
+</form>
+{% endblock %}
